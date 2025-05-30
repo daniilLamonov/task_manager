@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:17
+    container_name: database
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    env_file:
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    networks:
+      - sm_net
+  backend:
+    build:
+      context: ./backend
+#    image: backend
+    container_name: backend
+    restart: always
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/utils/health-check/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+    networks:
+      - sm_net
+    depends_on:
+      db:
+        condition: service_healthy
+  nginx:
+    build:
+      context: ./frontend
+    container_name: frontend
+    restart: always
+    networks:
+      - sm_net
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    ports:
+      - "80:80"
+
+volumes:
+  app-db-data:
+networks:
+  sm_net:
+    name: sm_net
+
