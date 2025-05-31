@@ -1,0 +1,27 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.15.2",
+    "asyncpg>=0.30.0",
+    "bcrypt==3.2.2",
+    "greenlet>=3.2.2",
+    "passlib>=1.7.4",
+    "pydantic[email]>=2.11.4",
+    "pydantic-settings>=2.9.1",
+    "pyjwt>=2.10.1",
+    "ruff>=0.11.10",
+    "sqlalchemy>=2.0.41",
+    "uuid>=1.30",
+    "uvicorn[standard,standart]>=0.34.2",
+    "python-multipart>=0.0.20",
+    "redis>=6.1.0",
+    "isort>=6.0.1",
+    "fastapi[standard]>=0.115.12",
+    "fastapi-cli>=0.0.7",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=1.0.0",
+]
