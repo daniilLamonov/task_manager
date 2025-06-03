@@ -8,7 +8,7 @@ from app.api.deps import CurrentUser
 from app.api.schemas.task import TaskOutSchema, TaskSchema
 from app.repo.task import TaskRepo
 
-from app.core.config import settings
+from app.core import settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -16,11 +16,6 @@ router = APIRouter(prefix="/tasks", tags=["tasks"])
 active_connections: Set[WebSocket] = set()
 
 # r = redis.Redis(host="localhost", port=6379)
-
-
-@router.get("/set")
-def get_sett():
-    return settings
 
 @router.websocket("/ws/")
 async def websocket_endpoint(websocket: WebSocket):

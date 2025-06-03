@@ -5,10 +5,11 @@ from uuid import UUID
 import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.testing.pickleable import User
 
 from app.core.config import settings
 from app.repo.user import UserRepo
+
+from db.models import Users
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/login")
 
@@ -32,6 +33,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
-CurrentUser = Annotated[User, Depends(get_current_user)]
+CurrentUser = Annotated[Users, Depends(get_current_user)]
 
 
