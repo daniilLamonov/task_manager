@@ -1,4 +1,4 @@
-# FastAPI Wallet Information Service
+# FullStack Task Manager
 
 Этот проект предоставляет FullStack приложение - менеджер задач для командной работы.
 
